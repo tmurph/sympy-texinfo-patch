@@ -32,7 +32,7 @@ def test_no_duplicate_sections_in_texi_output(test_app):
     test_app.build()
 
     # Read the generated .texi file
-    texi_file = test_app.outdir / f"{test_app.config.project.replace(' ', '')}.texi"
+    texi_file = test_app.outdir / f"{test_app.config.project.replace(' ', '').lower()}.texi"
     content = texi_file.read_text()
 
     # Count occurrences of "@node Introductory Tutorial"
@@ -49,7 +49,7 @@ def test_preserves_section_content(test_app):
     """Test that the actual tutorial content is preserved after merging."""
     test_app.build()
 
-    texi_file = test_app.outdir / f"{test_app.config.project.replace(' ', '')}.texi"
+    texi_file = test_app.outdir / f"{test_app.config.project.replace(' ', '').lower()}.texi"
     content = texi_file.read_text()
 
     # The actual tutorial content should be present
@@ -114,7 +114,7 @@ Advanced content here.
 
     test_app.build()
 
-    texi_file = test_app.outdir / f"{test_app.config.project.replace(' ', '')}.texi"
+    texi_file = test_app.outdir / f"{test_app.config.project.replace(' ', '').lower()}.texi"
     content = texi_file.read_text()
 
     # Should have single nodes for Basics and Advanced, not duplicates
