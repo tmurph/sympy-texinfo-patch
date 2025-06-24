@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sympy-texinfo-patch"
+version = "0.1.0"
+description = "Sphinx extension to fix texinfo output for ref sections"
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "sphinx>=4.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=6.0",
+    "pytest-cov",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+log_level = "INFO"
