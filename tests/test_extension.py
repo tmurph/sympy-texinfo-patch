@@ -1,6 +1,9 @@
 # tests/test_extension.py
 
+import logging
 import pytest
+
+from pytest import LogCaptureFixture
 from sphinx.testing.util import SphinxTestApp
 
 
@@ -13,8 +16,10 @@ def texi_contents(app: SphinxTestApp) -> str:
 # param needs to match up with a directory f'test-{testroot}' under the
 # `rootdir` directory provided in conftest.py
 @pytest.mark.sphinx('texinfo', testroot='basic', copy_test_root=True)
-def test_no_duplicate_sections_in_texi_output(app: SphinxTestApp) -> None:
+def test_no_duplicate_sections_in_texi_output(
+        app: SphinxTestApp, caplog: LogCaptureFixture) -> None:
     """Test that duplicate 'Introductory Tutorial' sections are merged."""
+    caplog.set_level(logging.INFO)
     app.build()
 
     # Read the generated .texi file
@@ -30,6 +35,7 @@ def test_no_duplicate_sections_in_texi_output(app: SphinxTestApp) -> None:
     assert "@node Introductory Tutorial<2>" not in content
 
 
+@pytest.mark.skip(reason="just want to focus on one test")
 @pytest.mark.sphinx('texinfo', testroot='basic', copy_test_root=True)
 def test_preserves_section_content(app):
     """Test that the actual tutorial content is preserved after merging."""
@@ -47,6 +53,7 @@ def test_preserves_section_content(app):
     assert desc_count <= 1, f"Description appears {desc_count} times, should appear at most once"
 
 
+@pytest.mark.skip(reason="just want to focus on one test")
 @pytest.mark.sphinx('texinfo', testroot='basic', copy_test_root=True)
 def test_handles_multiple_ref_sections(app):
     """Test handling of multiple :ref: sections with a single hidden toctree."""

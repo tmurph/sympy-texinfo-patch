@@ -9,6 +9,30 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def _print_tree(node: nodes.Node, indent=0) -> None:
+    # Print node info
+    node_type = type(node).__name__
+    prefix = "  " * indent
+
+    if hasattr(node, 'astext'):
+        text = node.astext()[:50]
+        if len(node.astext()) > 50:
+            text += "..."
+        logger.info(f"{prefix}{node_type}: '{text}'")
+    else:
+        logger.info(f"{prefix}{node_type}")
+
+    # Print children
+    if hasattr(node, 'children'):
+        for child in node.children:
+            _print_tree(child, indent + 1)
+
+
+def print_doctree(app: Sphinx, doctree: nodes.document) -> None:
+    """Inspect the parsed doctree."""
+    _print_tree(doctree)
+
+
 class PatchedTexinfoTranslator(TexinfoTranslator):
     """Patched TexinfoTranslator that prevents duplicate sections from refs."""
 
@@ -70,7 +94,8 @@ class PatchedTexinfoTranslator(TexinfoTranslator):
 
 def setup(app: Sphinx):
     """Setup function for Sphinx extension."""
-    app.set_translator('texinfo', PatchedTexinfoTranslator, override=True)
+    # app.set_translator('texinfo', PatchedTexinfoTranslator, override=True)
+    app.connect('doctree-read', print_doctree)
 
     return {
         'version': '0.6',
