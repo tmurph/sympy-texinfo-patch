@@ -1,10 +1,15 @@
 # src/sympy_texinfo_patch/extension.py
 
-from sphinx.application import Sphinx
-from sphinx.writers.texinfo import TexinfoTranslator
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from docutils import nodes
 from sphinx import addnodes
 import logging
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 logger = logging.getLogger(__name__)
 
@@ -29,73 +34,36 @@ def _print_tree(node: nodes.Node, indent=0) -> None:
 
 
 def print_doctree(app: Sphinx, doctree: nodes.document) -> None:
-    """Inspect the parsed doctree."""
+    """Inspect each parsed doctree."""
+    logger.info("Starting new doctree")
     _print_tree(doctree)
 
 
-class PatchedTexinfoTranslator(TexinfoTranslator):
-    """Patched TexinfoTranslator that prevents duplicate sections from refs."""
+def print_resolved(app: Sphinx, doctree: nodes.document, docname: str) -> None:
+    """Inspect the final doctree."""
+    logger.info(f"Beginning final doctree pass for '{docname}'")
+    _print_tree(doctree)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._ref_sections = set()  # Track sections created from refs
-        self._in_hidden_toctree = False
 
-    def visit_reference(self, node):
-        # Check if this reference is followed by section markup
-        if 'refid' in node:
-            parent = node.parent
-            if isinstance(parent, nodes.paragraph):
-                # Check if paragraph parent is followed by a transition
-                grandparent = parent.parent
-                if grandparent:
-                    try:
-                        idx = grandparent.index(parent)
-                        if idx + 1 < len(grandparent):
-                            next_node = grandparent[idx + 1]
-                            if isinstance(next_node, nodes.transition):
-                                # This ref becomes a section
-                                self._ref_sections.add(node.astext())
-                    except (ValueError, IndexError):
-                        pass
-
-        super().visit_reference(node)
-
-    def visit_toctree(self, node):
-        if node.get('hidden', False):
-            self._in_hidden_toctree = True
-        super().visit_toctree(node)
-
-    def depart_toctree(self, node):
-        if node.get('hidden', False):
-            self._in_hidden_toctree = False
-        super().depart_toctree(node)
-
-    def visit_section(self, node):
-        # Get section title
-        title = ""
-        if node.children and isinstance(node.children[0], nodes.title):
-            title = node.children[0].astext()
-
-        # If we're in a hidden toctree and this section matches a ref section, skip it
-        if self._in_hidden_toctree and title in self._ref_sections:
-            raise nodes.SkipNode
-
-        # Check if parent is start_of_file (toctree-included content)
-        parent = node.parent
-        if isinstance(parent, addnodes.start_of_file):
-            # This is content from a toctree inclusion
-            # If the title matches a ref section, skip it
-            if title in self._ref_sections:
-                raise nodes.SkipNode
-
-        super().visit_section(node)
+def remove_sections_with_refs(app: Sphinx, doctree: nodes.document) -> None:
+    """Strip out the sections that contain a ref in their title."""
+    for xref in list(doctree.findall(addnodes.pending_xref)):
+        title: nodes.title = xref.parent
+        section: nodes.section = title.parent
+        if isinstance(title, nodes.title) and isinstance(section, nodes.section):
+            # TODO: is the compound-toctree *always* at the same level?
+            if (toctree := title.next_node(nodes.compound, descend=False,
+                                           siblings=True)):
+                section.replace_self(toctree)
+            else:
+                section.parent.remove(section)
 
 
 def setup(app: Sphinx):
     """Setup function for Sphinx extension."""
-    # app.set_translator('texinfo', PatchedTexinfoTranslator, override=True)
-    app.connect('doctree-read', print_doctree)
+    # app.connect('doctree-read', print_doctree)
+    app.connect('doctree-read', remove_sections_with_refs)
+    # app.connect('doctree-resolved', print_resolved)
 
     return {
         'version': '0.6',

@@ -1,15 +1,16 @@
+INFO     sympy_texinfo_patch.extension:extension.py:33 Starting new doctree
 INFO     sympy_texinfo_patch.extension:extension.py:21 document: '
 
 Tutorials
 
-/tmp/pytest-of-trevor/pytest-13/basic...'
+/tmp/pytest-of-trevor/pytest-19/basic...'
 INFO     sympy_texinfo_patch.extension:extension.py:21   target: ''
 INFO     sympy_texinfo_patch.extension:extension.py:21   section: 'Tutorials
 
-/tmp/pytest-of-trevor/pytest-13/basic/i...'
+/tmp/pytest-of-trevor/pytest-19/basic/i...'
 INFO     sympy_texinfo_patch.extension:extension.py:21     title: 'Tutorials'
 INFO     sympy_texinfo_patch.extension:extension.py:21       Text: 'Tutorials'
-INFO     sympy_texinfo_patch.extension:extension.py:21     system_message: '/tmp/pytest-of-trevor/pytest-13/basic/index.rst:5:...'
+INFO     sympy_texinfo_patch.extension:extension.py:21     system_message: '/tmp/pytest-of-trevor/pytest-19/basic/index.rst:5:...'
 INFO     sympy_texinfo_patch.extension:extension.py:21       paragraph: 'Duplicate implicit target name: “tutorials”.'
 INFO     sympy_texinfo_patch.extension:extension.py:21         Text: 'Duplicate implicit target name: “tutorials”.'
 INFO     sympy_texinfo_patch.extension:extension.py:21     paragraph: 'Tutorials are the best place to start.'
@@ -25,6 +26,7 @@ INFO     sympy_texinfo_patch.extension:extension.py:21       paragraph: 'If you 
 INFO     sympy_texinfo_patch.extension:extension.py:21         Text: 'If you are new to SymPy, start here.'
 INFO     sympy_texinfo_patch.extension:extension.py:21       compound: ''
 INFO     sympy_texinfo_patch.extension:extension.py:21         toctree: ''
+INFO     sympy_texinfo_patch.extension:extension.py:33 Starting new doctree
 INFO     sympy_texinfo_patch.extension:extension.py:21 document: '
 
 Introductory Tutorial
@@ -38,3 +40,45 @@ INFO     sympy_texinfo_patch.extension:extension.py:21     title: 'Introductory 
 INFO     sympy_texinfo_patch.extension:extension.py:21       Text: 'Introductory Tutorial'
 INFO     sympy_texinfo_patch.extension:extension.py:21     paragraph: 'This tutorial aims to give an introduction.'
 INFO     sympy_texinfo_patch.extension:extension.py:21       Text: 'This tutorial aims to give an introduction.'
+INFO     sympy_texinfo_patch.extension:extension.py:39 Beginning final doctree pass for 'index'
+INFO     sympy_texinfo_patch.extension:extension.py:21 document: '
+
+Tutorials
+
+Tutorials are the best place to start...'
+INFO     sympy_texinfo_patch.extension:extension.py:21   target: ''
+INFO     sympy_texinfo_patch.extension:extension.py:21   section: 'Tutorials
+
+Tutorials are the best place to start.
+...'
+INFO     sympy_texinfo_patch.extension:extension.py:21     title: 'Tutorials'
+INFO     sympy_texinfo_patch.extension:extension.py:21       Text: 'Tutorials'
+INFO     sympy_texinfo_patch.extension:extension.py:21     paragraph: 'Tutorials are the best place to start.'
+INFO     sympy_texinfo_patch.extension:extension.py:21       Text: 'Tutorials are the best place to start.'
+INFO     sympy_texinfo_patch.extension:extension.py:21     section: 'Introductory Tutorial
+
+If you are new to SymPy, st...'
+INFO     sympy_texinfo_patch.extension:extension.py:21       title: 'Introductory Tutorial'
+INFO     sympy_texinfo_patch.extension:extension.py:21         reference: 'Introductory Tutorial'
+INFO     sympy_texinfo_patch.extension:extension.py:21           inline: 'Introductory Tutorial'
+INFO     sympy_texinfo_patch.extension:extension.py:21             Text: 'Introductory Tutorial'
+INFO     sympy_texinfo_patch.extension:extension.py:21       paragraph: 'If you are new to SymPy, start here.'
+INFO     sympy_texinfo_patch.extension:extension.py:21         Text: 'If you are new to SymPy, start here.'
+INFO     sympy_texinfo_patch.extension:extension.py:21       compound: '
+
+Introductory Tutorial
+
+This tutorial aims to giv...'
+INFO     sympy_texinfo_patch.extension:extension.py:21         start_of_file: '
+
+Introductory Tutorial
+
+This tutorial aims to giv...'
+INFO     sympy_texinfo_patch.extension:extension.py:21           target: ''
+INFO     sympy_texinfo_patch.extension:extension.py:21           section: 'Introductory Tutorial
+
+This tutorial aims to give ...'
+INFO     sympy_texinfo_patch.extension:extension.py:21             title: 'Introductory Tutorial'
+INFO     sympy_texinfo_patch.extension:extension.py:21               Text: 'Introductory Tutorial'
+INFO     sympy_texinfo_patch.extension:extension.py:21             paragraph: 'This tutorial aims to give an introduction.'
+INFO     sympy_texinfo_patch.extension:extension.py:21               Text: 'This tutorial aims to give an introduction.'
