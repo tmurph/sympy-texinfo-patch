@@ -1,7 +1,7 @@
 .. _polys-wester:
 
 ==============================
-Examples from Wester's Article
+Examples from Westers Article
 ==============================
 
 Introduction

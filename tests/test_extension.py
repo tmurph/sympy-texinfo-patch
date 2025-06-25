@@ -52,3 +52,14 @@ def test_handles_multiple_ref_sections(texi_contents):
     assert texi_contents.count("@node Advanced") == 1
     assert "@node Basics<2>" not in texi_contents
     assert "@node Advanced<2>" not in texi_contents
+
+
+@pytest.mark.sphinx('texinfo', testroot='empty-contents', copy_test_root=True)
+def test_contents_section_with_only_toctree_is_eliminated(texi_contents):
+    """Test that a 'Contents' section containing only a toctree is eliminated."""
+    # The "Contents" section should not appear as a node
+    assert "@node Contents" not in texi_contents
+
+    # The toctree entries should appear directly under the main section
+    # Check that "Examples from Westers Article" appears without Contents as parent
+    assert "@node Examples from Westers Article" in texi_contents
