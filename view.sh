@@ -18,8 +18,9 @@ fi
 INFO_FILE_ABS=$(realpath "$INFO_FILE")
 
 # Call emacsclient to create a new frame with the info file
-emacsclient --alternate-editor= --create-frame --eval "
+emacsclient --no-wait --alternate-editor= --create-frame --eval "
 (progn
+  (ignore-errors (kill-buffer \"*sympy-texinfo-patch*\"))
   (info \"($INFO_FILE_ABS)\" \"*sympy-texinfo-patch*\")
   (set-window-dedicated-p (selected-window) t))
 "
