@@ -3,7 +3,7 @@
 Multiple
 ========
 
-Overview of the API.
+This test case has multiple headings in the TOC.
 
 :ref:`Basics <basics>`
 ----------------------
