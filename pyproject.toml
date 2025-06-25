@@ -18,8 +18,8 @@ test = [
     "pytest-cov",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+py-modules = ["sympy_texinfo_patch"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
