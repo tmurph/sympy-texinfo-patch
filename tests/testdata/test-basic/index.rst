@@ -1,8 +1,8 @@
-.. _tutorials:
+.. _basic:
 
-=========
-Tutorials
-=========
+=====
+Basic
+=====
 
 Tutorials are the best place to start.
 

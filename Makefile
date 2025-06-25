@@ -6,30 +6,39 @@ SPHINXBUILD  = venv/bin/sphinx-build
 
 # Sphinx options
 SPHINXOPTS   =
-BUILDDIR     = tests/test_docs/build
-SOURCEDIR    = tests/test_docs/source
+BUILDDIR     = docs/_build
+TEXINFODIR   = $(BUILDDIR)/texinfo
+SOURCEDIR    = tests/testdata
 ALLSPHINXOPTS = -d $(BUILDDIR)/doctrees $(SPHINXOPTS)
 
-.PHONY: test clean build-test install view-texi venv
+# These are directories that begin with "test-"
+PROJECTS != ls $(SOURCEDIR)
 
-venv: $(PYTHON)
-	python3 -m venv venv
-	$(PIP) install sphinx pytest pytest-cov
-	$(PIP) install -e .
+.PHONY: $(PROJECTS)
+.PHONY: test clean
 
-install: venv
-	$(PIP) install -e .
+%.texi: test-%
+	$(SPHINXBUILD) -b texinfo $(ALLSPHINXOPTS) $(SOURCEDIR)/$< $(TEXINFODIR) -E
+
+%.info: %.texi
+	$(MAKE) -C $(TEXINFODIR) $@
+
+view-%: %.info
+	./view.sh $(TEXINFODIR)/$<
 
 test:
 	$(PYTEST) -v
-
-test-build:
-	$(SPHINXBUILD) -b texinfo $(ALLSPHINXOPTS) $(SOURCEDIR) $(BUILDDIR)/texinfo -E
 
 clean:
 	rm -rf $(BUILDDIR)
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 
-view-texi:
-	cat $(BUILDDIR)/texinfo/*.texi | less
+# These don't belong in a Makefile.  They're more of a configure check.
+# Whatever.  The recipes are here now, and I want them saved somewhere.
+$(PYTHON) $(PIP):
+	python3 -m venv venv
+
+$(PYTEST) $(SPHINXBUILD): $(PIP)
+	$(PIP) install sphinx pytest pytest-cov
+	$(PIP) install -e .

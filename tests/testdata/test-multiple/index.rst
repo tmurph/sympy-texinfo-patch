@@ -1,7 +1,7 @@
-.. _reference:
+.. _multiple:
 
-API Reference
-=============
+Multiple
+========
 
 Overview of the API.
 
