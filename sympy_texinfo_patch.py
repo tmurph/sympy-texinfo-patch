@@ -45,42 +45,50 @@ def print_resolved(app: Sphinx, doctree: nodes.document, docname: str) -> None:
     _print_tree(doctree)
 
 
-def remove_sections_with_refs(app: Sphinx, doctree: nodes.document) -> None:
+def remove_texinfo_ref_sections(app: Sphinx, doctree: nodes.document) -> None:
     """Strip out the sections that contain a ref in their title."""
     for xref in list(doctree.findall(addnodes.pending_xref)):
         title: nodes.title = xref.parent
         section: nodes.section = title.parent
         if isinstance(title, nodes.title) and isinstance(section, nodes.section):
-            # TODO: is the compound-toctree *always* at the same level?
-            if (toctree := title.next_node(nodes.compound, descend=False,
-                                           siblings=True)):
-                section.replace_self(toctree)
-            else:
-                section.parent.remove(section)
+            # In any case, this doctree must always get rebuilt
+            app.env.note_reread()
+            # In the texinfo case, strip out the offending sections.
+            if app.builder.format == 'texinfo':
+                # TODO: is the compound-toctree *always* at the same level?
+                if (toctree := title.next_node(nodes.compound, descend=False,
+                                               siblings=True)):
+                    section.replace_self(toctree)
+                else:
+                    section.parent.remove(section)
 
 
-def remove_empty_contents_sections(app: Sphinx, doctree: nodes.document) -> None:
+def remove_texinfo_empty_contents_sections(app: Sphinx, doctree: nodes.document) -> None:
     """Strip out placeholder 'Contents' sections."""
     filter = lambda node: isinstance(node, nodes.title) and node.astext().lower() == 'contents'
     for title in list(doctree.findall(filter)):
         section: nodes.section = title.parent
         if isinstance(section, nodes.section):
-            if (toctree := title.next_node(nodes.compound, descend=False,
-                                           siblings=True)):
-                section.replace_self(toctree)
-            else:
-                section.parent.remove(section)
+            # In any case, this doctree must always get rebuilt
+            app.env.note_reread()
+            # In the texinfo case, strip out the offending sections.
+            if app.builder.format == 'texinfo':
+                if (toctree := title.next_node(nodes.compound, descend=False,
+                                               siblings=True)):
+                    section.replace_self(toctree)
+                else:
+                    section.parent.remove(section)
 
 
 def setup(app: Sphinx):
     """Setup function for Sphinx extension."""
     # app.connect('doctree-read', print_doctree)
-    app.connect('doctree-read', remove_sections_with_refs)
-    app.connect('doctree-read', remove_empty_contents_sections)
     # app.connect('doctree-resolved', print_resolved)
+    app.connect('doctree-read', remove_texinfo_ref_sections)
+    app.connect('doctree-read', remove_texinfo_empty_contents_sections)
 
     return {
-        'version': '0.7',
+        'version': '0.8',
         'parallel_read_safe': True,
         'parallel_write_safe': True,
     }
